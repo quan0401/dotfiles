@@ -56,3 +56,9 @@ if [[ -n "$TMUX" ]]; then
     PROMPT_COMMAND="set_window_title; $PROMPT_COMMAND"
 fi
 
+# zprofile
+alias nnn="nnn -de"
+export NNN_BMS="d:~/Downloads;D:~/dropbox/Document"
+export NNN_USE_ICONS=1
+export NNN_FIFO="/tmp/nnn.fifo"
+export NNN_PLUG='f:finder;o:fzopen;p:preview-tui;d:diffs;t:nmount;v:imgview;c:copy-path.sh;e:open-with-nvim.sh;t:preview-tabbed'

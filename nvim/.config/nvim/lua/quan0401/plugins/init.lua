@@ -23,6 +23,19 @@ return {
 		},
 
 		config = function()
+			local function multiline_input(prompt, callback)
+				local lines = {}
+				local function on_line(input)
+					if input == "" then
+						callback(table.concat(lines, "\n"))
+					else
+						table.insert(lines, input)
+						vim.ui.input({ prompt = prompt }, on_line)
+					end
+				end
+				vim.ui.input({ prompt = prompt }, on_line)
+			end
+
 			require("CopilotChat").setup({
 				debug = true,
 				build = "make tiktoken", -- Only on MacOS or Linux,
@@ -33,11 +46,20 @@ return {
 				require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
 			end, { desc = "CopilotChat - Prompt actions" })
 
+			keymap.set("n", "<leader>ccm", function()
+				multiline_input("Multine Lines Chats: ", function(input)
+					if input ~= nil and input ~= "" then
+						require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+					end
+				end)
+			end, { desc = "CopilotChat - Multine Lines Chats: " })
+
 			keymap.set("n", "<leader>ccq", function()
-				local input = vim.fn.input("Quick Chat: ")
-				if input ~= "" then
-					require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
-				end
+				vim.ui.input({ prompt = "Quick Chat: " }, function(input)
+					if input ~= nil and input ~= "" then
+						require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+					end
+				end)
 			end, { desc = "CopilotChat - Quick chat" })
 
 			keymap.set("v", "<leader>ccq", function()

@@ -87,6 +87,11 @@ return {
 			git = {
 				ignore = false,
 			},
+			--  navigate on telescope will show the file in nvim-tree
+			update_focused_file = {
+				enable = true,
+				update_cwd = true,
+			},
 		})
 
 		-- set keymaps

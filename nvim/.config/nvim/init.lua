@@ -50,3 +50,6 @@ vim.api.nvim_create_autocmd({ "User" }, {
 		vim.api.nvim_exec_autocmds("User", { pattern = "SessionSavePre" })
 	end,
 })
+
+-- vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#636841" }) -- Change this to your desired color
+vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "NONE", bg = "NONE" }) -- Change this to your desired color

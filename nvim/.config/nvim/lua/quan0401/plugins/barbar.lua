@@ -70,7 +70,7 @@ return {
 		-- Close buffer
 		map("n", "<leader>bc", ":BufferCloseAllButCurrent<CR>", { noremap = true, silent = true })
 		map("n", "<leader>bp", ":BufferCloseAllButPinned<CR>", { noremap = true, silent = true })
-		map("n", "<leader>bcp", ":BufferCloseAllButCurrentOrPinned<CR>", { noremap = true, silent = true })
+		map("n", "<leader>bac", ":BufferCloseAllButCurrentOrPinned<CR>", { noremap = true, silent = true })
 		map("n", "<leader>bl", ":BufferCloseBuffersLeft<CR>", { noremap = true, silent = true })
 		map("n", "<leader>br", ":BufferCloseBuffersRight<CR>", { noremap = true, silent = true })
 

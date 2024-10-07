@@ -42,14 +42,5 @@ opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
 
-vim.opt.sessionoptions:append("globals")
-vim.api.nvim_create_autocmd({ "User" }, {
-	pattern = "PersistedSavePre",
-	group = vim.api.nvim_create_augroup("PersistedHooks", {}),
-	callback = function()
-		vim.api.nvim_exec_autocmds("User", { pattern = "SessionSavePre" })
-	end,
-})
-
 -- vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#636841" }) -- Change this to your desired color
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "NONE", bg = "NONE" }) -- Change this to your desired color

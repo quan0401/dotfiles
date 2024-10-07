@@ -57,9 +57,9 @@ if [[ -n "$TMUX" ]]; then
 fi
 
 # zprofile
-alias nnn="nnn -de"
+alias nnn="nnn -deA"
 export NNN_BMS="d:~/Downloads;D:~/dropbox/Document;c:~/.config"
 export NNN_USE_ICONS=1
 export NNN_FIFO="/tmp/nnn.fifo"
-export NNN_PLUG='f:finder;o:fzopen;p:preview-tui;d:diffs;t:open-in-terminal.sh;v:imgview;c:copy-path.sh;e:open-with-nvim.sh;t:preview-tabbed'
+export NNN_PLUG='f:finder;o:fzopen;p:preview-tui;d:diffs;t:open-in-terminal.sh;v:imgview;y:copy-path.sh;e:open-with-nvim.sh;t:preview-tabbed'
 export NNN_TERMINAL="tmux"

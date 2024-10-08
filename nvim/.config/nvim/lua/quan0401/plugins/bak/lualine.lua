@@ -43,10 +43,9 @@ return {
 				c = { bg = colors.bg, fg = colors.fg },
 			},
 			inactive = {
-				a = { bg = colors.inactive_bg, fg = colors.semilightgray, gui = "bold" },
-				b = { bg = colors.inactive_bg, fg = colors.semilightgray },
-				-- c = { bg = colors.inactive_bg, fg = "#ff9e64" },
-				c = { bg = colors.inactive_bg, fg = colors.semilightgray },
+				a = { bg = colors.inactive_bg, fg = colors.fg, gui = "bold" },
+				b = { bg = colors.inactive_bg, fg = colors.fg },
+				c = { bg = colors.inactive_bg, fg = colors.fg },
 			},
 		}
 
@@ -56,23 +55,35 @@ return {
 				theme = my_lualine_theme,
 			},
 			sections = {
-				lualine_c = {
-					{
-						"filename",
-						path = 0, -- 0 = just filename, 1 = relative path, 2 = absolute path
-						color = { fg = "#ff9e64" },
-					},
-				},
+				lualine_a = { "mode" }, -- You can keep your mode on the left
+				lualine_b = { "branch", "diff", "diagnostics" },
+				lualine_c = {}, -- Keep this empty or add any components you want on the left
 				lualine_x = {
 					{
-						lazy_status.updates,
-						cond = lazy_status.has_updates,
-						color = { fg = "#ff9e64" },
+						"filename", -- Place filename here to show at the top right
+						color = { fg = colors.violet, bg = colors.bg },
+						path = 1, -- Use 1 for relative path, 0 for base name only
 					},
 					{ "encoding" },
 					{ "fileformat" },
 					{ "filetype" },
 				},
+				lualine_y = {},
+				lualine_z = {},
+			},
+			inactive_sections = {
+				lualine_a = { "mode" },
+				lualine_b = { "branch", "diff", "diagnostics" },
+				lualine_c = {
+					{
+						"filename", -- Keep filename color same for inactive state
+						color = { fg = colors.violet, bg = colors.inactive_bg },
+						path = 1, -- Use 1 for relative path, 0 for base name only
+					},
+				},
+				lualine_x = { { "location" } },
+				lualine_y = {},
+				lualine_z = {},
 			},
 		})
 	end,

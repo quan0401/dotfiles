@@ -24,18 +24,18 @@ return {
 	config = function()
 		require("barbar").setup({
 			-- options = {
-			--      show_tab_indicators = true,
-			--      show_close_icon = false,
-			--      show_buffer_close_icons = false,
-			--      show_buffer_icons = false,
-			--      show_tab_close_icons = false,
-			--      persist_buffer_sort = true,
-			--      separator_style = "thin",
-			--      mappings = true,
+			-- 	show_tab_indicators = true,
+			-- 	show_close_icon = false,
+			-- 	show_buffer_close_icons = false,
+			-- 	show_buffer_icons = false,
+			-- 	show_tab_close_icons = false,
+			-- 	persist_buffer_sort = true,
+			-- 	separator_style = "thin",
+			-- 	mappings = true,
+			-- },
 			tabpages = true,
-			-- hide = { inactive = true },
+			hide = { inactive = true },
 			show_tab_indicators = true,
-
 			icons = {
 
 				-- buffer_number = true,

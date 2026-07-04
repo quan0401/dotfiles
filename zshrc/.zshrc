@@ -1,3 +1,5 @@
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -117,4 +119,46 @@ eval "$(atuin init zsh)"
 
 # cd /Users/quankento/dropbox/Document
 
-source ~/.zprofile
+source ~/.zprofile #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+# Add JBang to environment
+alias j!=jbang
+export PATH="$HOME/.jbang/bin:$PATH"
+
+# Ghostty shell integration
+if [[ -n "$GHOSTTY_RESOURCES_DIR" ]]; then
+    source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
+fi
+
+# Auto-notify after long-running commands (>3 seconds)
+__cmd_start_time=0
+__cmd_name=""
+__notify_threshold=3
+__notify_exclude=(vim nvim less man ssh top htop tmux)
+
+preexec() {
+    __cmd_start_time=$EPOCHSECONDS
+    __cmd_name="${${1## }[1,50]}"
+}
+
+precmd() {
+    local elapsed=$(( EPOCHSECONDS - __cmd_start_time ))
+    if (( __cmd_start_time > 0 && elapsed >= __notify_threshold )); then
+        # Skip excluded commands
+        if (( ! ${__notify_exclude[(Ie)$__cmd_name]} )); then
+            osascript -e "display notification \"Took ${elapsed}s\" with title \"✅ $__cmd_name finished\"" &>/dev/null
+        fi
+    fi
+    __cmd_start_time=0
+}
+
+# ECC (everything-claude-code) update
+alias ecc-update="bash ~/.agents/scripts/ecc-update.sh"
+
+# Added by Antigravity
+export PATH="/Users/quankento/.antigravity/antigravity/bin:$PATH"

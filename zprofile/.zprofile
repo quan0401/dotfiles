@@ -71,6 +71,16 @@ export NNN_USE_ICONS=1
 export NNN_FIFO="/tmp/nnn.fifo"
 export NNN_PLUG='F:finder;o:fzopen;p:preview-tui;d:diffs;f:open-in-finder.sh;t:open-in-ghostty.sh;T:open-in-ghostty-tmux.sh;v:open-in-vscode.sh;V:imgview;y:copy-path.sh;e:open-with-nvim.sh;P:preview-tabbed;D:dragdrop;r:renamer;O:organize'
 export NNN_TERMINAL="tmux"
+
+# nnn in tmux with preview pane auto-started (-P p runs the preview-tui plugin at launch)
+nnp() {
+    if [ -n "$TMUX" ]; then
+        nnn -deA -P p "$@"          # already in tmux -> just open with preview
+    else
+        tmux new-session "nnn -deA -P p"   # not in tmux -> spawn a tmux session running it
+    fi
+}
+
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 fpath=($fpath ~/.zsh/completion)export ANDROID_HOME=~/Library/Android/sdk
 export PATH=$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH

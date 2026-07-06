@@ -169,22 +169,43 @@ alias hh='zatuin_run_selected'
 
 
 # open INDEX.md (or given file) in Chrome via absolute path
-# no arg: tries ./INDEX.md, then ./myDocs/INDEX.md
+# no arg: ./INDEX.md -> ./myDocs/INDEX.md -> recursive search, prompt to pick
 idx() {
   local f="$1"
-  if [[ -z "$f" ]]; then
-    if [[ -f "INDEX.md" ]]; then
-      f="INDEX.md"
-    elif [[ -f "myDocs/INDEX.md" ]]; then
-      f="myDocs/INDEX.md"
-    else
-      echo "no INDEX.md in $(pwd) or $(pwd)/myDocs" >&2
+  if [[ -n "$f" ]]; then
+    if [[ ! -f "$f" ]]; then
+      echo "no $f in $(pwd)" >&2
       return 1
     fi
-  elif [[ ! -f "$f" ]]; then
-    echo "no $f in $(pwd)" >&2
-    return 1
+  elif [[ -f "INDEX.md" ]]; then
+    f="INDEX.md"
+  elif [[ -f "myDocs/INDEX.md" ]]; then
+    f="myDocs/INDEX.md"
+  else
+    # gather all INDEX.md under pwd
+    local -a hits
+    hits=("${(@f)$(find . -type f -name 'INDEX.md' 2>/dev/null | sed 's|^\./||')}")
+    if [[ ${#hits[@]} -eq 0 || -z "${hits[1]}" ]]; then
+      echo "no INDEX.md found under $(pwd)" >&2
+      return 1
+    elif [[ ${#hits[@]} -eq 1 ]]; then
+      f="${hits[1]}"
+    elif command -v fzf >/dev/null; then
+      # vim-style: NORMAL (j/k g/G q), / -> SEARCH (type to filter), esc -> NORMAL, enter opens
+      local np='NORMAL (j/k move · g/G top/bot · / search · q quit) > '
+      f="$(printf '%s\n' "${hits[@]}" | fzf \
+            --height=60% --reverse --cycle \
+            --prompt="$np" \
+            --bind 'j:down,k:up,g:first,G:last,q:abort' \
+            --bind "/:unbind(j,k,g,G,q)+change-prompt(SEARCH (esc back) > )+clear-query" \
+            --bind "esc:rebind(j,k,g,G,q)+change-prompt($np)")"
+      [[ -z "$f" ]] && return 1
+    else
+      echo "select INDEX.md:" >&2
+      select f in "${hits[@]}"; do [[ -n "$f" ]] && break; done
+      [[ -z "$f" ]] && return 1
+    fi
   fi
-  local abs="$(cd "$(dirname "$f")" && pwd)/$(basename "$f")"
-  open -a "Google Chrome" "file://$abs"
+  local abs="${f:A}"
+  open -a "Google Chrome" "$abs"
 }
